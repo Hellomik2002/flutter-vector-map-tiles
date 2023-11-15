@@ -1,4 +1,7 @@
-import 'package:flutter_map/plugin_api.dart';
+// import 'package:flutter_map/plugin_api.dart';
+import 'dart:math';
+
+import 'package:flutter_map/flutter_map.dart';
 import 'package:test/test.dart';
 import 'package:vector_map_tiles/src/tile_identity.dart';
 import 'package:vector_map_tiles/src/tile_viewport.dart';
@@ -6,7 +9,12 @@ import 'package:vector_map_tiles/src/tile_viewport.dart';
 void main() {
   group('overlaps:', () {
     final viewport = TileViewport(
-        2, Bounds(const CustomPoint(1, 1), const CustomPoint(2, 2)));
+      2,
+      Bounds(
+        const Point(1, 1),
+        const Point(2, 2),
+      ),
+    );
 
     test('when tile is at same zoom', () {
       expect(viewport.overlaps(TileIdentity(2, 0, 0)), false);

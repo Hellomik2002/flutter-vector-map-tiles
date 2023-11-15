@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
+// import 'package:flutter_map/plugin_api.dart';
 
 import '../tile_identity.dart';
 import 'constants.dart';
@@ -32,10 +33,10 @@ class GridTilePositioner {
   }
 
   Offset _tileOffset(TileIdentity tile) {
-    final tilePosition =
-        ((tile.toDoublePoint().scaleBy(tileSize) - state.origin) *
-                state.zoomScale) +
-            state.translate;
+    final tilePosition = ((tile.toDoublePoint().scaleBy(tileSize) -
+                state.origin.toDoublePoint()) *
+            state.zoomScale) +
+        state.translate.toDoublePoint();
     return Offset(tilePosition.x.toDouble(), tilePosition.y.toDouble());
   }
 }
@@ -87,13 +88,13 @@ class GridTileSizer {
 
 class TilePositioningState {
   final double zoomScale;
-  late final CustomPoint<double> origin;
-  late final CustomPoint<double> translate;
+  late final Point<num> origin;
+  late final Point<num> translate;
 
-  TilePositioningState(this.zoomScale, FlutterMapState mapState, double zoom) {
+  TilePositioningState(this.zoomScale, MapCamera camera, double zoom) {
     final pixelOrigin =
-        mapState.getNewPixelOrigin(mapState.center, mapState.zoom).round();
-    origin = mapState.project(mapState.unproject(pixelOrigin, zoom), zoom);
+        camera.getNewPixelOrigin(camera.center, camera.zoom).round();
+    origin = camera.project(camera.unproject(pixelOrigin, zoom), zoom);
     translate = (origin * zoomScale) - pixelOrigin;
   }
 }
